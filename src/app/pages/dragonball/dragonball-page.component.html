@@ -3,21 +3,45 @@
 
 <section class="row">
   <div class="col-12 col-sm-6">
-    <h3>Agregar:</h3>
-    <input type="text" class="form-control" placeholder="Nombre" />
-    <input type="number" class="form-control mt-2" placeholder="Poder" />
+    <h3>Agregar: {{name()}} - {{power()}}</h3>
+    <input
+        type="text"
+        class="form-control"
+        placeholder="Nombre"
+        [value]="name()"
+        (change)="name.set(txtName.value)"
+        (input)="name.set(txtName.value)"
+        #txtName
+    />
+    <input
+        type="number"
+        class="form-control mt-2"
+        placeholder="Poder"
+        [value]="power()"
+        (change)="power.set(txtPower.valueAsNumber)"
+        (input)="power.set(txtPower.valueAsNumber)"
+        #txtPower
+    />
 
-    <button class="mt-2 btn btn-primary">Agregar</button>
+    <button (click)="addCharacter()" class="mt-2 btn btn-primary">Agregar</button>
   </div>
 
   <div class="col-12 col-sm-6">
-    <h3>Listado</h3>
+    <h3>Peleadores fuertes</h3>
     <ul>
       @for (character of characters(); track character.id; let idx = $index) {
-      <li>
-        <span>{{ idx + 1 }} - {{ character.name }}</span>
-        <strong class="text-danger"> ({{ character.power }})</strong>
-      </li>
+        @if (character.power > 500) {
+            <li>
+                <span>{{ idx + 1 }} - {{ character.name }}</span>
+                <strong
+                    [class.text-danger] = "character.power > 9000"
+                    [class.text-info] = "character.power < 9000">
+                ({{ character.power }})</strong>
+            </li>
+
+        } @else {
+            <li><strong>Aquí no hay nadie.</strong></li>
+        }
       }
     </ul>
   </div>
